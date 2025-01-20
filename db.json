@@ -1,0 +1,145 @@
+{
+    "slack_channels": [
+        {
+            "id": 1,
+            "name": "backend-team"
+        },
+        {
+            "id": 2,
+            "name": "frontend-team"
+        }
+    ],
+    "messages": [
+        {
+            "id": 101,
+            "channel_id": 1,
+            "content": "Server response times are spiking."
+        },
+        {
+            "id": 102,
+            "channel_id": 1,
+            "content": "Investigating the database connection pool."
+        },
+        {
+            "id": 103,
+            "channel_id": 1,
+            "content": "Deploying a hotfix to production."
+        },
+        {
+            "id": 104,
+            "channel_id": 1,
+            "content": "Can we optimize Redis cache for faster lookups?"
+        },
+        {
+            "id": 105,
+            "channel_id": 1,
+            "content": "API gateway latency is unusually high."
+        },
+        {
+            "id": 106,
+            "channel_id": 1,
+            "content": "Security audit results came back clean."
+        },
+        {
+            "id": 201,
+            "channel_id": 2,
+            "content": "UI tests are failing on the login screen."
+        },
+        {
+            "id": 202,
+            "channel_id": 2,
+            "content": "Looking into React state management issues."
+        },
+        {
+            "id": 203,
+            "channel_id": 2,
+            "content": "Dropdown menus aren't rendering in Firefox."
+        },
+        {
+            "id": 204,
+            "channel_id": 2,
+            "content": "Pagination doesn't work in the table component."
+        },
+        {
+            "id": 205,
+            "channel_id": 2,
+            "content": "Need better error handling in the forms."
+        }
+    ],
+    "ticket_projects": [
+        {
+            "id": 1,
+            "name": "Infrastructure Stability"
+        },
+        {
+            "id": 2,
+            "name": "Frontend Reliability"
+        }
+    ],
+    "tickets": [
+        {
+            "id": 301,
+            "project_id": 1,
+            "title": "Fix database connection pool leak"
+        },
+        {
+            "id": 302,
+            "project_id": 1,
+            "title": "Improve server performance monitoring"
+        },
+        {
+            "id": 303,
+            "project_id": 1,
+            "title": "Optimize Redis cache settings"
+        },
+        {
+            "id": 304,
+            "project_id": 1,
+            "title": "Investigate API gateway latency"
+        },
+        {
+            "id": 305,
+            "project_id": 1,
+            "title": "Add automated SSL renewal"
+        },
+        {
+            "id": 306,
+            "project_id": 1,
+            "title": "Improve log retention policy"
+        },
+        {
+            "id": 307,
+            "project_id": 2,
+            "title": "Fix login screen validation errors"
+        },
+        {
+            "id": 308,
+            "project_id": 2,
+            "title": "Resolve dropdown menu rendering issues"
+        },
+        {
+            "id": 309,
+            "project_id": 2,
+            "title": "Implement proper pagination in tables"
+        },
+        {
+            "id": 310,
+            "project_id": 2,
+            "title": "Improve error handling in forms"
+        }
+    ],
+    "meetings": [
+        {
+            "id": 401,
+            "title": "Weekly Infra Sync"
+        },
+        {
+            "id": 402,
+            "title": "Frontend Standup"
+        },
+        {
+            "id": 403,
+            "title": "Incident Review"
+        }
+    ]
+}
