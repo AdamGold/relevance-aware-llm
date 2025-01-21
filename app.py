@@ -39,6 +39,8 @@ def create_llm_context_from_results(results):
             data = fetch_entity_data(
                 entity_type=external_id["type"], entity_id=external_id["id"]
             )
+            if not data:
+                continue
             context["tickets"].append(data)
 
         for related_node in record["related_nodes_in"]:
@@ -47,9 +49,12 @@ def create_llm_context_from_results(results):
                 data = fetch_entity_data(
                     entity_type=external_id["type"], entity_id=external_id["id"]
                 )
-                if external_id["type"] == EntityTypes.MESSAGE:
+                if not data:
+                    continue
+                print(f"Got {data} for {external_id['type']}")
+                if external_id["type"] == EntityTypes.MESSAGE.value:
                     context["messages"].append(data)
-                elif external_id["type"] == EntityTypes.MEETING:
+                elif external_id["type"] == EntityTypes.MEETING.value:
                     context["meeting_transcriptions"].append(data)
 
     print(context)
@@ -154,7 +159,7 @@ if st.sidebar.button("Submit"):
 
     # Display results
     st.subheader("Graph Context")
-    st.text(context)
+    st.text(formatted_context)
 
     st.subheader("Generated Answer")
     st.write(answer)
