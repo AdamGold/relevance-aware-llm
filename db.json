@@ -76,7 +76,7 @@
             "name": "Frontend Reliability"
         }
     ],
-    "tickets": [
+    "issues": [
         {
             "id": 301,
             "project_id": 1,
