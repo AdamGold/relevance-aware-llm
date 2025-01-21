@@ -13,57 +13,57 @@
         {
             "id": 101,
             "channel_id": 1,
-            "content": "Server response times are spiking."
+            "content": "Hey team, the server response times have been spiking since last night's deploy. Has anyone noticed similar behavior?"
         },
         {
             "id": 102,
             "channel_id": 1,
-            "content": "Investigating the database connection pool."
+            "content": "I think it might be related to the database connection pool. I'm seeing a lot of failed connections in the logs. Investigating further."
         },
         {
             "id": 103,
             "channel_id": 1,
-            "content": "Deploying a hotfix to production."
+            "content": "Thanks, everyone. We’re deploying a hotfix now to address the database connection issue. Please monitor production for the next hour."
         },
         {
             "id": 104,
             "channel_id": 1,
-            "content": "Can we optimize Redis cache for faster lookups?"
+            "content": "Can we also revisit our Redis caching strategy? I feel like it's causing unnecessary delays in read operations."
         },
         {
             "id": 105,
             "channel_id": 1,
-            "content": "API gateway latency is unusually high."
+            "content": "Heads up: API gateway latency is unusually high today. It might be worth checking the load balancer configuration."
         },
         {
             "id": 106,
             "channel_id": 1,
-            "content": "Security audit results came back clean."
+            "content": "Good news, everyone: the security audit results came back clean. No critical vulnerabilities were found."
         },
         {
             "id": 201,
             "channel_id": 2,
-            "content": "UI tests are failing on the login screen."
+            "content": "The UI tests are failing on the login screen again. This seems to happen whenever we update the authentication service."
         },
         {
             "id": 202,
             "channel_id": 2,
-            "content": "Looking into React state management issues."
+            "content": "I'm looking into the React state management issues. Some components aren't re-rendering as expected."
         },
         {
             "id": 203,
             "channel_id": 2,
-            "content": "Dropdown menus aren't rendering in Firefox."
+            "content": "Dropdown menus are completely broken in Firefox. Can someone confirm if this is a browser-specific issue?"
         },
         {
             "id": 204,
             "channel_id": 2,
-            "content": "Pagination doesn't work in the table component."
+            "content": "Pagination isn't working in the table component. I’ll push a hotfix for this tomorrow."
         },
         {
             "id": 205,
             "channel_id": 2,
-            "content": "Need better error handling in the forms."
+            "content": "We need better error handling in the forms. Right now, users aren't getting meaningful error messages."
         }
     ],
     "ticket_projects": [
@@ -80,66 +80,79 @@
         {
             "id": 301,
             "project_id": 1,
-            "title": "Fix database connection pool leak"
+            "title": "Fix database connection pool leak",
+            "status": "in progress"
         },
         {
             "id": 302,
             "project_id": 1,
-            "title": "Improve server performance monitoring"
+            "title": "Improve server performance monitoring",
+            "status": "open"
         },
         {
             "id": 303,
             "project_id": 1,
-            "title": "Optimize Redis cache settings"
+            "title": "Optimize Redis cache settings",
+            "status": "open"
         },
         {
             "id": 304,
             "project_id": 1,
-            "title": "Investigate API gateway latency"
+            "title": "Investigate API gateway latency",
+            "status": "in progress"
         },
         {
             "id": 305,
             "project_id": 1,
-            "title": "Add automated SSL renewal"
+            "title": "Add automated SSL renewal",
+            "status": "resolved"
         },
         {
             "id": 306,
             "project_id": 1,
-            "title": "Improve log retention policy"
+            "title": "Improve log retention policy",
+            "status": "closed"
         },
         {
             "id": 307,
             "project_id": 2,
-            "title": "Fix login screen validation errors"
+            "title": "Fix login screen validation errors",
+            "status": "in progress"
         },
         {
             "id": 308,
             "project_id": 2,
-            "title": "Resolve dropdown menu rendering issues"
+            "title": "Resolve dropdown menu rendering issues",
+            "status": "open"
         },
         {
             "id": 309,
             "project_id": 2,
-            "title": "Implement proper pagination in tables"
+            "title": "Implement proper pagination in tables",
+            "status": "open"
         },
         {
             "id": 310,
             "project_id": 2,
-            "title": "Improve error handling in forms"
+            "title": "Improve error handling in forms",
+            "status": "open"
         }
     ],
     "meetings": [
         {
             "id": 401,
-            "title": "Weekly Infra Sync"
+            "title": "Weekly Infra Sync",
+            "transcription": "Team discussed ongoing infra issues, including database connection pool leaks and API gateway latency. Next steps involve deploying a hotfix and optimizing Redis settings."
         },
         {
             "id": 402,
-            "title": "Frontend Standup"
+            "title": "Frontend Standup",
+            "transcription": "The team highlighted critical issues like login screen errors and dropdown rendering bugs in Firefox. Plans for the week include improving form error handling and fixing pagination."
         },
         {
             "id": 403,
-            "title": "Incident Review"
+            "title": "Incident Review",
+            "transcription": "Reviewed last week's server spike incident. Root cause identified as a misconfigured connection pool. Action items: update monitoring alerts and review deployment procedures."
         }
     ]
 }
