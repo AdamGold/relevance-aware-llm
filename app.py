@@ -57,7 +57,6 @@ def create_llm_context_from_results(results):
                 elif external_id["type"] == EntityTypes.MEETING.value:
                     context["meeting_transcriptions"].append(data)
 
-    print(context)
     return context
 
 
@@ -78,28 +77,19 @@ def generate_answer(context, question):
         messages=[
             {
                 "role": "system",
-                "content": """
-        You are an expert assistant specializing in providing clear and accurate answers based on graph-based data. Your role is to help users understand the relationships and insights within the data fetched from a graph database. 
-
-When generating answers:
-1. Always focus on the context provided, using it to construct concise, fact-based responses.
-2. If the context lacks sufficient information to answer the user's question, acknowledge this and suggest clarifying queries or next steps.
-3. Clearly explain relationships between entities (e.g., which users created posts, who liked them, or which comments were added to posts).
-4. Ensure your tone is professional, approachable, and helpful.
-5. Avoid making assumptions beyond the data presented in the context.
-
-Here are some examples of how to approach queries:
-- If asked "Who created the post titled 'Post 1 Title'?", respond with something like: "The post titled 'Post 1 Title' was created by Leanne Graham (ID: 1)."
-- If asked "Which posts did User 2 like?", respond with: "User 2 liked the following posts: Post 1 Title (ID: 1)."
-- If the question is unanswerable with the current context, respond with: "I couldn't find this information in the current data. Could you clarify or refine your question?"
-
-Always aim to provide actionable, graph-based insights in a friendly and clear way.
-
-        """,
+                "content": "You are an assistant tasked with perliminary summarization of content from productivity tools used by an software development team.\n"
+                "Your results are CRITICAL for the final summary creation, so make sure to provide the most accurate and relevant information.\n"
+                "You will be provided with a document representation of such content:\n"
+                "- The document will contain the main item with its comments/additional information items\n"
+                "- Each item  will include its item type, main text, secondary text, author, created at, updated at, and status (if available) of the item.\n"
+                "- The item type is a combination of the product and the type of the item.\n\n"
+                "Ensure that the extraction:\n"
+                "- Has full coverage, capturing all significant information.\n"
+                "- Is factually correct based solely on the provided document.\n"
+                "- Uses clear and concise language.\n",
             },
             {"role": "user", "content": prompt},
         ],
-        max_tokens=150,
         temperature=0,
     )
     return response.choices[0].message.content
@@ -137,14 +127,14 @@ if st.sidebar.button("Submit"):
         # Fetch data from JSONPlaceholder
         context = create_llm_context_from_results(results=results)
         formatted_context = f"""
-        Tickets:
-        {[ticket for ticket in context['tickets']]}
+        ### Tickets
+        {"".join(f"- **ID {ticket['id']}**: {ticket['title']} (Status: {ticket['status']})\n" for ticket in context['tickets'])}
 
-        Messages:
-        {[message for message in context['messages']]}
+        ### Messages
+        {"".join(f"- **Channel {message['channel_id']}**: {message['content']}\n" for message in context['messages'])}
 
-        Meeting transcriptions:
-        {[meeting for meeting in context['meeting_transcriptions']]}
+        ### Meeting Transcriptions
+        {"".join(f"#### {meeting['title']} (ID: {meeting['id']})\n- {meeting['transcription']}\n\n" for meeting in context['meeting_transcriptions'])}
         """
 
         if not context:

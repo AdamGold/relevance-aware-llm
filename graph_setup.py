@@ -32,7 +32,6 @@ def setup_graph():
             "CREATE (:Project {id: 'ticket|project|2'})",
             # Create Tickets
             "CREATE (:Ticket {id: 'ticket|issue|301'})",
-            "CREATE (:Ticket {id: 'ticket|issue|302'})",
             "CREATE (:Ticket {id: 'ticket|issue|303'})",
             "CREATE (:Ticket {id: 'ticket|issue|304'})",
             "CREATE (:Ticket {id: 'ticket|issue|305'})",
@@ -49,19 +48,21 @@ def setup_graph():
             "MATCH (c:Channel {id: 'slack|channel|1'}), (m:Message) WHERE m.id IN ['slack|message|101', 'slack|message|102', 'slack|message|103', 'slack|message|104', 'slack|message|105'] CREATE (m)-[:child_of]->(c)",
             "MATCH (c:Channel {id: 'slack|channel|2'}), (m:Message) WHERE m.id IN ['slack|message|201', 'slack|message|202', 'slack|message|203', 'slack|message|204', 'slack|message|205'] CREATE (m)-[:child_of]->(c)",
             # Create Relationships (Projects to Tickets)
-            "MATCH (p:Project {id: 'ticket|project|1'}), (t:Ticket) WHERE t.id IN ['ticket|issue|301', 'ticket|issue|302', 'ticket|issue|303', 'ticket|issue|304', 'ticket|issue|305'] CREATE (t)-[:child_of]->(p)",
+            "MATCH (p:Project {id: 'ticket|project|1'}), (t:Ticket) WHERE t.id IN ['ticket|issue|301', 'ticket|issue|303', 'ticket|issue|304', 'ticket|issue|305'] CREATE (t)-[:child_of]->(p)",
             "MATCH (p:Project {id: 'ticket|project|2'}), (t:Ticket) WHERE t.id IN ['ticket|issue|306', 'ticket|issue|307', 'ticket|issue|308', 'ticket|issue|309', 'ticket|issue|310'] CREATE (t)-[:child_of]->(p)",
             # Create Relationships (Messages to Tickets based on mentions or discussions)
             "MATCH (m:Message {id: 'slack|message|101'}), (t:Ticket {id: 'ticket|issue|301'}) CREATE (m)-[:link_to]->(t)",
-            "MATCH (m:Message {id: 'slack|message|102'}), (t:Ticket {id: 'ticket|issue|302'}) CREATE (m)-[:link_to]->(t)",
-            "MATCH (m:Message {id: 'slack|message|105'}), (t:Ticket {id: 'ticket|issue|303'}) CREATE (m)-[:link_to]->(t)",
-            "MATCH (m:Message {id: 'slack|message|201'}), (t:Ticket {id: 'ticket|issue|307'}) CREATE (m)-[:link_to]->(t)",
-            "MATCH (m:Message {id: 'slack|message|204'}), (t:Ticket {id: 'ticket|issue|310'}) CREATE (m)-[:link_to]->(t)",
+            "MATCH (m:Message {id: 'slack|message|102'}), (t:Ticket {id: 'ticket|issue|301'}) CREATE (m)-[:link_to]->(t)",
+            "MATCH (m:Message {id: 'slack|message|103'}), (t:Ticket {id: 'ticket|issue|301'}) CREATE (m)-[:link_to]->(t)",
+            "MATCH (m:Message {id: 'slack|message|104'}), (t:Ticket {id: 'ticket|issue|303'}) CREATE (m)-[:link_to]->(t)",
+            "MATCH (m:Message {id: 'slack|message|105'}), (t:Ticket {id: 'ticket|issue|304'}) CREATE (m)-[:link_to]->(t)",
+            "MATCH (m:Message {id: 'slack|message|203'}), (t:Ticket {id: 'ticket|issue|308'}) CREATE (m)-[:link_to]->(t)",
+            "MATCH (m:Message {id: 'slack|message|204'}), (t:Ticket {id: 'ticket|issue|309'}) CREATE (m)-[:link_to]->(t)",
+            "MATCH (m:Message {id: 'slack|message|205'}), (t:Ticket {id: 'ticket|issue|310'}) CREATE (m)-[:link_to]->(t)",
             # Create Relationships (Meetings to Tickets based on discussions)
-            "MATCH (mt:Meeting {id: 'google|meeting|401'}), (t:Ticket {id: 'ticket|issue|301'}) CREATE (mt)-[:link_to]->(t)",
-            "MATCH (mt:Meeting {id: 'google|meeting|402'}), (t:Ticket {id: 'ticket|issue|302'}) CREATE (mt)-[:link_to]->(t)",
-            "MATCH (mt:Meeting {id: 'google|meeting|403'}), (t:Ticket {id: 'ticket|issue|307'}) CREATE (mt)-[:link_to]->(t)",
-            "MATCH (mt:Meeting {id: 'google|meeting|403'}), (t:Ticket {id: 'ticket|issue|310'}) CREATE (mt)-[:link_to]->(t)",
+            "MATCH (mt:Meeting {id: 'google|meeting|401'}), (t:Ticket {id: 'ticket|issue|303'}) CREATE (mt)-[:link_to]->(t)",
+            "MATCH (mt:Meeting {id: 'google|meeting|402'}), (t:Ticket {id: 'ticket|issue|308'}) CREATE (mt)-[:link_to]->(t)",
+            "MATCH (mt:Meeting {id: 'google|meeting|403'}), (t:Ticket {id: 'ticket|issue|301'}) CREATE (mt)-[:link_to]->(t)",
         ]
 
         for query in queries:
