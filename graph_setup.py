@@ -15,7 +15,6 @@ def setup_graph():
         queries = [
             # Create Slack Channels
             "CREATE (:Channel {id: 'slack|channel|1'})",
-            "CREATE (:Channel {id: 'slack|channel|2'})",
             # Create Slack Messages
             "CREATE (:Message {id: 'slack|message|101'})",
             "CREATE (:Message {id: 'slack|message|102'})",
@@ -45,8 +44,7 @@ def setup_graph():
             "CREATE (:Meeting {id: 'google|meeting|402'})",
             "CREATE (:Meeting {id: 'google|meeting|403'})",
             # Create Relationships (Channels to Messages)
-            "MATCH (c:Channel {id: 'slack|channel|1'}), (m:Message) WHERE m.id IN ['slack|message|101', 'slack|message|102', 'slack|message|103', 'slack|message|104', 'slack|message|105'] CREATE (m)-[:child_of]->(c)",
-            "MATCH (c:Channel {id: 'slack|channel|2'}), (m:Message) WHERE m.id IN ['slack|message|201', 'slack|message|202', 'slack|message|203', 'slack|message|204', 'slack|message|205'] CREATE (m)-[:child_of]->(c)",
+            "MATCH (c:Channel {id: 'slack|channel|1'}), (m:Message) WHERE m.id IN ['slack|message|101', 'slack|message|102', 'slack|message|103', 'slack|message|104', 'slack|message|105', 'slack|message|201', 'slack|message|202', 'slack|message|203', 'slack|message|204', 'slack|message|205'] CREATE (m)-[:child_of]->(c)",
             # Create Relationships (Projects to Tickets)
             "MATCH (p:Project {id: 'ticket|project|1'}), (t:Ticket) WHERE t.id IN ['ticket|issue|301', 'ticket|issue|303', 'ticket|issue|304', 'ticket|issue|305'] CREATE (t)-[:child_of]->(p)",
             "MATCH (p:Project {id: 'ticket|project|2'}), (t:Ticket) WHERE t.id IN ['ticket|issue|306', 'ticket|issue|307', 'ticket|issue|308', 'ticket|issue|309', 'ticket|issue|310'] CREATE (t)-[:child_of]->(p)",

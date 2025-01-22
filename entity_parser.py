@@ -1,10 +1,34 @@
 from enum import Enum
+from pydantic import BaseModel, Field
 
 
 class EntityTypes(Enum):
     TICKET = "ticket"
     MESSAGE = "message"
     MEETING = "meeting"
+
+
+class Ticket(BaseModel):
+    id: str | int
+    title: str
+    status: str
+
+
+class Message(BaseModel):
+    id: str | int
+    content: str
+
+
+class Meeting(BaseModel):
+    id: str | int
+    title: str
+    transcription: str
+
+
+class ContextForLLM(BaseModel):
+    tickets: list[Ticket] = Field(default_factory=list)
+    messages: list[Message] = Field(default_factory=list)
+    meeting_transcriptions: list[Meeting] = Field(default_factory=list)
 
 
 class EntityParser:

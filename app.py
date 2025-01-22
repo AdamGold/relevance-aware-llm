@@ -1,9 +1,16 @@
 import streamlit as st
-from neo4j import GraphDatabase
+from neo4j import GraphDatabase, Record
 from openai import OpenAI
 
 from client import fetch_entity_data
-from entity_parser import EntityParser, EntityTypes
+from entity_parser import (
+    ContextForLLM,
+    EntityParser,
+    EntityTypes,
+    Meeting,
+    Message,
+    Ticket,
+)
 
 # Neo4j connection details
 NEO4J_URI = "bolt://localhost:7687"
@@ -26,12 +33,8 @@ def query_graph(query):
         return [record for record in results]
 
 
-def create_llm_context_from_results(results):
-    context = {
-        "tickets": [],
-        "messages": [],
-        "meeting_transcriptions": [],
-    }
+def create_llm_context_from_results(results: list[Record]) -> ContextForLLM:
+    context = ContextForLLM()
 
     for record in results:
         for ticket in record["tickets"]:
@@ -41,7 +44,7 @@ def create_llm_context_from_results(results):
             )
             if not data:
                 continue
-            context["tickets"].append(data)
+            context.tickets.append(Ticket(**data))
 
         for related_node in record["related_nodes_in"]:
             for entity in related_node:
@@ -53,14 +56,27 @@ def create_llm_context_from_results(results):
                     continue
                 print(f"Got {data} for {external_id['type']}")
                 if external_id["type"] == EntityTypes.MESSAGE.value:
-                    context["messages"].append(data)
+                    context.messages.append(Message(**data))
                 elif external_id["type"] == EntityTypes.MEETING.value:
-                    context["meeting_transcriptions"].append(data)
+                    context.meeting_transcriptions.append(Meeting(**data))
 
     return context
 
 
-def generate_answer(context, question):
+def format_entities_for_llm(context: ContextForLLM) -> str:
+    return f"""
+        ### Tickets
+        {"".join(f"- **ID {ticket.id}**: {ticket.title} (Status: {ticket.status})\n" for ticket in context.tickets)}
+
+        ### Messages
+        {"".join(f"- {message.content}\n" for message in context.messages)}
+
+        ### Meeting Transcriptions
+        {"".join(f"#### {meeting.title} (ID: {meeting.id})\n- {meeting.transcription}\n\n" for meeting in context.meeting_transcriptions)}
+        """
+
+
+def generate_answer(context: str, question: str) -> str | None:
     """Generate LLM response using context and question."""
     prompt = f"""
     Context:
@@ -126,30 +142,22 @@ if st.sidebar.button("Submit"):
 
         # Fetch data from JSONPlaceholder
         context = create_llm_context_from_results(results=results)
-        formatted_context = f"""
-        ### Tickets
-        {"".join(f"- **ID {ticket['id']}**: {ticket['title']} (Status: {ticket['status']})\n" for ticket in context['tickets'])}
-
-        ### Messages
-        {"".join(f"- **Channel {message['channel_id']}**: {message['content']}\n" for message in context['messages'])}
-
-        ### Meeting Transcriptions
-        {"".join(f"#### {meeting['title']} (ID: {meeting['id']})\n- {meeting['transcription']}\n\n" for meeting in context['meeting_transcriptions'])}
-        """
+        formatted_context = format_entities_for_llm(context=context)
 
         if not context:
             context = "No data found for the given filter."
 
         # Generate answer
         answer = (
-            generate_answer(context, user_query)
+            generate_answer(formatted_context, user_query)
             if context
             else "No relevant data found."
         )
 
     # Display results
-    st.subheader("Graph Context")
-    st.text(formatted_context)
 
     st.subheader("Generated Answer")
     st.write(answer)
+
+    st.subheader("Graph Context")
+    st.text(formatted_context)
