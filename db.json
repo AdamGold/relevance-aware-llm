@@ -2,11 +2,7 @@
     "slack_channels": [
         {
             "id": 1,
-            "name": "backend-team"
-        },
-        {
-            "id": 2,
-            "name": "frontend-team"
+            "name": "dev-team"
         }
     ],
     "messages": [
@@ -42,27 +38,27 @@
         },
         {
             "id": 201,
-            "channel_id": 2,
+            "channel_id": 1,
             "content": "Login screen tests are failing due to race conditions between the UI and authentication service. Any thoughts on mocking these interactions during tests?"
         },
         {
             "id": 202,
-            "channel_id": 2,
+            "channel_id": 1,
             "content": "React state management issues persist. Some components are missing updates when global state changes. Exploring Redux middleware to address this. Open to other suggestions!"
         },
         {
             "id": 203,
-            "channel_id": 2,
+            "channel_id": 1,
             "content": "Dropdown menus are broken in Firefox. The issue seems to stem from CSS inconsistencies. Proposing a library update to fix this, but need buy-in."
         },
         {
             "id": 204,
-            "channel_id": 2,
+            "channel_id": 1,
             "content": "Pagination bugs in the table component trace back to server-side misalignment. I’ll hotfix tomorrow, but we should explore end-to-end testing for this workflow."
         },
         {
             "id": 205,
-            "channel_id": 2,
+            "channel_id": 1,
             "content": "Form error handling needs revamp. Let’s aim for actionable error messages tied to field validation. What libraries could streamline this effort?"
         }
     ],
