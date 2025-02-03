@@ -1,8 +1,13 @@
 from neo4j import GraphDatabase
+from dotenv import load_dotenv
+import os
+
+load_dotenv()  # Load environment variables from .env
+
 
 NEO4J_URI = "bolt://localhost:7687"
-NEO4J_USER = "neo4j"
-NEO4J_PASSWORD = "ZXXXX"
+NEO4J_USER = os.getenv("DB_USERNAME")
+NEO4J_PASSWORD = os.getenv("DB_PASSWORD")
 
 driver = GraphDatabase.driver(NEO4J_URI, auth=(NEO4J_USER, NEO4J_PASSWORD))
 
