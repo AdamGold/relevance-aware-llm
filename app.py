@@ -11,16 +11,20 @@ from entity_parser import (
     Message,
     Ticket,
 )
+from dotenv import load_dotenv
+import os
+
+load_dotenv()  # Load environment variables from .env
+
 
 # Neo4j connection details
 NEO4J_URI = "bolt://localhost:7687"
-NEO4J_USER = "neo4j"
-NEO4J_PASSWORD = "wgyB5Mdqae3icKy"
+NEO4J_USER = os.getenv("DB_USERNAME")
+NEO4J_PASSWORD = os.getenv("DB_PASSWORD")
 
 driver = GraphDatabase.driver(NEO4J_URI, auth=(NEO4J_USER, NEO4J_PASSWORD))
 
-# OpenAI API setup
-openai_api_key = "XXX"
+openai_api_key = os.getenv("OPENAI_API_KEY")
 client = OpenAI(
     api_key=openai_api_key,
 )

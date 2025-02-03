@@ -10,6 +10,7 @@ python = "^3.12"
 streamlit = "^1.41.1"
 neo4j = "^5.27.0"
 openai = "^1.59.8"
+python-dotenv = "^1.0.1"
 
 
 [build-system]
