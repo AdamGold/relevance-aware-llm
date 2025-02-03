@@ -40,44 +40,13 @@ def query_graph(query):
 def create_llm_context_from_results(results: list[Record]) -> ContextForLLM:
     context = ContextForLLM()
 
-    for record in results:
-        for ticket in record["tickets"]:
-            external_id = EntityParser.parse_id(ticket["id"])
-            data = fetch_entity_data(
-                entity_type=external_id["type"], entity_id=external_id["id"]
-            )
-            if not data:
-                continue
-            context.tickets.append(Ticket(**data))
-
-        for related_node in record["related_nodes_in"]:
-            for entity in related_node:
-                external_id = EntityParser.parse_id(entity["id"])
-                data = fetch_entity_data(
-                    entity_type=external_id["type"], entity_id=external_id["id"]
-                )
-                if not data:
-                    continue
-                print(f"Got {data} for {external_id['type']}")
-                if external_id["type"] == EntityTypes.MESSAGE.value:
-                    context.messages.append(Message(**data))
-                elif external_id["type"] == EntityTypes.MEETING.value:
-                    context.meeting_transcriptions.append(Meeting(**data))
+    # PLACEHOLDER
 
     return context
 
 
 def format_entities_for_llm(context: ContextForLLM) -> str:
-    return f"""
-        ### Tickets
-        {"".join(f"- **ID {ticket.id}**: {ticket.title} (Status: {ticket.status})\n" for ticket in context.tickets)}
-
-        ### Messages
-        {"".join(f"- {message.content}\n" for message in context.messages)}
-
-        ### Meeting Transcriptions
-        {"".join(f"#### {meeting.title} (ID: {meeting.id})\n- {meeting.transcription}\n\n" for meeting in context.meeting_transcriptions)}
-        """
+    return "PLACEHOLDER"
 
 
 def generate_answer(context: str, question: str) -> str | None:
@@ -130,31 +99,17 @@ user_query = st.sidebar.text_area("Ask a question:", placeholder="Who created po
 if st.sidebar.button("Submit"):
     with st.spinner("Querying the graph and fetching data..."):
         # Query Neo4j for the subgraph based on the selected ticket project
-        graph_query = f"""
-        MATCH (p:Project {{id: "{project_id}"}})<-[:child_of]-(t:Ticket)
-        OPTIONAL MATCH path_out=(t)-[:link_to*0..]->(related_out)
-        OPTIONAL MATCH path_in=(related_in)-[:link_to*0..]->(t)
-        RETURN 
-            p as project, 
-            collect(DISTINCT t) AS tickets,
-            collect(DISTINCT nodes(path_out)) AS related_nodes_out,
-            collect(DISTINCT nodes(path_in)) AS related_nodes_in,
-            collect(DISTINCT relationships(path_out)) AS related_relationships_out,
-            collect(DISTINCT relationships(path_in)) AS related_relationships_in
-        """
+        graph_query = "PLACEHOLDER"
         results = query_graph(graph_query)
 
         # Fetch data from JSONPlaceholder
         context = create_llm_context_from_results(results=results)
         formatted_context = format_entities_for_llm(context=context)
 
-        if not context:
-            context = "No data found for the given filter."
-
         # Generate answer
         answer = (
             generate_answer(formatted_context, user_query)
-            if context
+            if formatted_context
             else "No relevant data found."
         )
 

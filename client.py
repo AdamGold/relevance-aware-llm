@@ -10,10 +10,3 @@ def fetch_entity_data(entity_type: str, entity_id: str):
     - entity_type: Type of the entity (e.g., 'message')
     - entity_id: ID of the entity (e.g., '102')
     """
-    entity_factory = {"issue": "issues", "message": "messages", "meeting": "meetings"}
-    # Construct the endpoint URL
-    url = f"{BASE_URL}{entity_factory[entity_type]}/{entity_id}"
-    response = requests.get(url)
-    # FIXME implement access control here!
-    print(f"Fetched {url} and got {response.json()}")
-    return response.json() if response.status_code == 200 else None
