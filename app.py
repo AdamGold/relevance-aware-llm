@@ -126,7 +126,7 @@ project_id = st.sidebar.selectbox(
 )
 
 
-user_query = st.sidebar.text_input("Ask a question:", placeholder="Who created post 1?")
+user_query = st.sidebar.text_area("Ask a question:", placeholder="Who created post 1?")
 if st.sidebar.button("Submit"):
     with st.spinner("Querying the graph and fetching data..."):
         # Query Neo4j for the subgraph based on the selected ticket project
@@ -160,8 +160,10 @@ if st.sidebar.button("Submit"):
 
     # Display results
 
-    st.subheader("Generated Answer")
+    st.subheader(user_query)
+
+    st.title("Generated Answer")
     st.write(answer)
 
-    st.subheader("Graph Context")
-    st.text(formatted_context)
+    with st.expander(label="Graph Context"):
+        st.write(formatted_context)
