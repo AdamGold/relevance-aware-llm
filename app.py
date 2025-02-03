@@ -1,5 +1,5 @@
 import streamlit as st
-from neo4j import GraphDatabase, Record
+from neo4j import Record
 from openai import OpenAI
 
 from client import fetch_entity_data
@@ -14,6 +14,8 @@ from entity_parser import (
 from dotenv import load_dotenv
 import os
 
+from graph_client import get_project_related_items
+
 load_dotenv()  # Load environment variables from .env
 
 
@@ -22,19 +24,11 @@ NEO4J_URI = "bolt://localhost:7687"
 NEO4J_USER = os.getenv("DB_USERNAME")
 NEO4J_PASSWORD = os.getenv("DB_PASSWORD")
 
-driver = GraphDatabase.driver(NEO4J_URI, auth=(NEO4J_USER, NEO4J_PASSWORD))
 
 openai_api_key = os.getenv("OPENAI_API_KEY")
 client = OpenAI(
     api_key=openai_api_key,
 )
-
-
-def query_graph(query):
-    """Query Neo4j to fetch IDs."""
-    with driver.session() as session:
-        results = session.run(query)
-        return [record for record in results]
 
 
 def create_llm_context_from_results(results: list[Record]) -> ContextForLLM:
@@ -115,6 +109,24 @@ def generate_answer(context: str, question: str) -> str | None:
     return response.choices[0].message.content
 
 
+def get_answer_for_project(project_id: str):
+    # get all related tickets
+    # results = get_tickets(project_id)
+
+    # Query Neo4j for the subgraph based on the selected ticket project
+    results = get_project_related_items(project_id)
+    context = create_llm_context_from_results(results=results)
+    formatted_context = format_entities_for_llm(context=context)
+
+    answer = (
+        generate_answer(formatted_context, user_query)
+        if formatted_context
+        else "No relevant data found."
+    )
+
+    return answer, formatted_context
+
+
 # Streamlit UI
 st.title("Graph RAG App")
 
@@ -129,34 +141,7 @@ project_id = st.sidebar.selectbox(
 user_query = st.sidebar.text_area("Ask a question:", placeholder="Who created post 1?")
 if st.sidebar.button("Submit"):
     with st.spinner("Querying the graph and fetching data..."):
-        # Query Neo4j for the subgraph based on the selected ticket project
-        graph_query = f"""
-        MATCH (p:Project {{id: "{project_id}"}})<-[:child_of]-(t:Ticket)
-        OPTIONAL MATCH path_out=(t)-[:link_to*0..]->(related_out)
-        OPTIONAL MATCH path_in=(related_in)-[:link_to*0..]->(t)
-        RETURN 
-            p as project, 
-            collect(DISTINCT t) AS tickets,
-            collect(DISTINCT nodes(path_out)) AS related_nodes_out,
-            collect(DISTINCT nodes(path_in)) AS related_nodes_in,
-            collect(DISTINCT relationships(path_out)) AS related_relationships_out,
-            collect(DISTINCT relationships(path_in)) AS related_relationships_in
-        """
-        results = query_graph(graph_query)
-
-        # Fetch data from JSONPlaceholder
-        context = create_llm_context_from_results(results=results)
-        formatted_context = format_entities_for_llm(context=context)
-
-        if not context:
-            context = "No data found for the given filter."
-
-        # Generate answer
-        answer = (
-            generate_answer(formatted_context, user_query)
-            if context
-            else "No relevant data found."
-        )
+        answer, formatted_context = get_answer_for_project(project_id=project_id)
 
     # Display results
 
